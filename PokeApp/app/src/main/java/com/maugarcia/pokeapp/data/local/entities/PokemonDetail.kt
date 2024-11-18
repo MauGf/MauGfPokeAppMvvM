@@ -11,5 +11,6 @@ data class PokemonDetail(
     val weight: Int,
     val types: String,  // JSON string
     val stats: String,  // JSON string
-    val abilities: String  // JSON string
+    val abilities: String,  // JSON string
+    val imageUrl: String, // Aquí agregamos la URL de la imagen
 )

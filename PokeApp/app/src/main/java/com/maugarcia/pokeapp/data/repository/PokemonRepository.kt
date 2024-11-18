@@ -51,6 +51,10 @@ class PokemonRepository @Inject constructor(
 
     private suspend fun fetchAndStorePokemonDetail(id: Int): PokemonDetail {
         val response = api.getPokemonDetail(id)
+
+        // Asegúrate de obtener la URL de la imagen desde la respuesta
+        val imageUrl = response.sprites.front_default ?: ""  // Obtener la URL de la imagen
+
         return PokemonDetail(
             id = response.id,
             name = response.name,
@@ -58,7 +62,8 @@ class PokemonRepository @Inject constructor(
             weight = response.weight,
             types = gson.toJson(response.types),
             stats = gson.toJson(response.stats),
-            abilities = gson.toJson(response.abilities)
+            abilities = gson.toJson(response.abilities),
+            imageUrl = imageUrl  // Pasar la URL de la imagen aquí
         ).also {
             dao.insertPokemonDetail(it)
         }

@@ -38,12 +38,9 @@ class MainActivity : AppCompatActivity() {
     private fun setupRecyclerView() {
         // Función para manejar el click del Pokémon
         val onPokemonClick: (Pokemon) -> Unit = { pokemon ->
-            // Aquí manejas qué sucede cuando se hace click en un Pokémon
-            // Por ejemplo:
-            Toast.makeText(this, "Selected: ${pokemon.name}", Toast.LENGTH_SHORT).show()
-            // O navegar a los detalles:
-            // startActivity(PokemonDetailActivity.createIntent(this, pokemon))
+            startActivity(PokemonDetailActivity.createIntent(this, pokemon.id))
         }
+
 
         // Inicializar el adaptador con la función de click
         adapter = PokemonAdapter(onPokemonClick)

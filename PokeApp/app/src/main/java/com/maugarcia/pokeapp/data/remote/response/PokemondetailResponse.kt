@@ -9,9 +9,13 @@ data class PokemonDetailResponse(
     val weight: Int,
     val types: List<PokemonType>,
     val stats: List<PokemonStat>,
-    val abilities: List<PokemonAbility>
+    val abilities: List<PokemonAbility>,
+    val sprites: Sprites  // para la URL de la imagen
 )
 
+data class Sprites(
+    val front_default: String?  // URL de la imagen por defecto del Pokémon
+)
 data class PokemonType(
     val slot: Int,
     val type: Type
