@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">PokeApp</string>
+    <string name="pokemon_image">Pokemon image</string>
+    <string name="pokemon_detail_activity_label">Detalle de pokemon</string>
 </resources>

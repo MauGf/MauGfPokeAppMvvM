@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Colores principales -->
+    <color name="colorPrimary">#6200EE</color> <!-- Púrpura intenso -->
+    <color name="colorPrimaryDark">#3700B3</color> <!-- Púrpura oscuro -->
+    <color name="colorAccent">#03DAC5</color> <!-- Verde aguamarina claro -->
+
+    <!-- Otros colores útiles -->
+    <color name="colorOnPrimary">#FFFFFF</color> <!-- Blanco -->
+    <color name="colorOnSecondary">#000000</color> <!-- Negro -->
+
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
@@ -7,4 +16,10 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="fire_type">#FF4500</color>
+    <color name="water_type">#1E90FF</color>
+    <color name="grass_type">#32CD32</color>
+    <color name="electric_type">#FFD700</color>
+    <color name="default_type">#808080</color>
 </resources>
