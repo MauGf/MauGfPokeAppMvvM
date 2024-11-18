@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.maugarcia.pokeapp.data.local.entities.Pokemon
 import com.maugarcia.pokeapp.data.repository.PokemonRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -37,6 +38,7 @@ class PokemonViewModel @Inject constructor(
 
     init {
         loadInitialData()
+        startPokemonUpdateService()
     }
 
     private fun loadInitialData() {
@@ -45,9 +47,10 @@ class PokemonViewModel @Inject constructor(
                 _isLoading.value = true
                 val count = repository.getPokemonCount()
                 if (count == 0) {
+                    // Si no hay pokemones en la base de datos, obtener los primeros
                     repository.fetchAndStorePokemons(pageSize, 0)
                 }
-                searchPokemons()
+                searchPokemons() // Ejecutar búsqueda inicial
             } catch (e: Exception) {
                 _error.value = "Error loading initial data: ${e.message}"
                 Log.e("PokemonViewModel", "Error loading initial data", e)
@@ -64,10 +67,11 @@ class PokemonViewModel @Inject constructor(
                 val query = _searchQuery.value
                 val type = _selectedType.value
 
+                // Realizar búsqueda o cargar más pokemones según el filtro
                 _filteredPokemons.value = when {
                     query.isNotEmpty() -> repository.searchPokemons(query)
                     type != null -> repository.getPokemonsByType(type)
-                    else -> repository.getPokemons(currentOffset + pageSize)
+                    else -> repository.getPokemons(currentOffset, pageSize)
                 }
             } catch (e: Exception) {
                 _error.value = "Error searching pokemons: ${e.message}"
@@ -78,7 +82,7 @@ class PokemonViewModel @Inject constructor(
         }
     }
 
-    fun loadMorePokemon() {
+    fun loadMorePokemons() {
         if (_isLoading.value) return
         if (_searchQuery.value.isNotEmpty() || _selectedType.value != null) return
 
@@ -87,7 +91,7 @@ class PokemonViewModel @Inject constructor(
                 _isLoading.value = true
                 currentOffset += pageSize
                 repository.fetchAndStorePokemons(pageSize, currentOffset)
-                searchPokemons()
+                searchPokemons() // Vuelve a realizar la búsqueda después de cargar más pokemones
             } catch (e: Exception) {
                 _error.value = "Error loading more pokemon: ${e.message}"
                 Log.e("PokemonViewModel", "Error loading more pokemon", e)
@@ -100,12 +104,36 @@ class PokemonViewModel @Inject constructor(
     fun setSearchQuery(query: String) {
         _searchQuery.value = query
         currentOffset = 0
-        searchPokemons()
+        searchPokemons() // Realizar búsqueda cada vez que cambie la búsqueda
     }
 
     fun setSelectedType(type: String?) {
         _selectedType.value = type
         currentOffset = 0
-        searchPokemons()
+        searchPokemons() // Realizar búsqueda cada vez que cambie el tipo
+    }
+
+    // Iniciar el servicio que actualizará los pokemones automáticamente cada 30 segundos
+    private fun startPokemonUpdateService() {
+        // Esto puede ser hecho con un Worker o un JobScheduler para ejecutar el servicio en segundo plano cada 30 segundos
+        viewModelScope.launch {
+            while (true) {
+                delay(30000) // Esperar 30 segundos
+                addNewPokemons()
+            }
+        }
+    }
+
+    // Función para obtener y agregar nuevos pokemones periódicamente
+    private suspend fun addNewPokemons() {
+        try {
+            // Incrementa el offset para obtener pokemones más allá de los ya cargados
+            currentOffset += 10
+            repository.fetchAndStorePokemons(10, currentOffset)
+            searchPokemons() // Actualiza los pokemones filtrados
+        } catch (e: Exception) {
+            _error.value = "Error adding new pokemons: ${e.message}"
+            Log.e("PokemonViewModel", "Error adding new pokemons", e)
+        }
     }
 }
