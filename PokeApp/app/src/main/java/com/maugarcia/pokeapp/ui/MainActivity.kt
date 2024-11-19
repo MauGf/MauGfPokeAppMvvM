@@ -8,8 +8,11 @@ import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.Switch
 import android.widget.Toast
@@ -62,9 +65,17 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
+        lifecycleScope.launchWhenStarted {
+            pokemonViewModel.pokemons.collect { pokemons ->
+                // Actualiza la lista del adaptador
+                adapter.submitList(pokemons)
+            }
+        }
+
         setupRecyclerView()
         setupViewModel()
         checkAndStartPokemonService()
+        setupSearchBar()
     }
 
     private fun showToast(message: String) {
@@ -163,5 +174,22 @@ class MainActivity : AppCompatActivity() {
     private fun startPokemonService() {
         val serviceIntent = Intent(this, PokemonUpdateService::class.java)
         ContextCompat.startForegroundService(this, serviceIntent)
+    }
+
+    private fun setupSearchBar() {
+        findViewById<EditText>(R.id.et_search).addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val query = s.toString()
+                if (query.isNotEmpty()) {
+                    pokemonViewModel.searchPokemons(query, searchByType = false) // Cambiar a true para buscar por tipo
+                } else {
+                    adapter.submitList(viewModel.pokemons.value) // Restaurar lista completa
+                }
+            }
+
+            override fun afterTextChanged(s: Editable?) {}
+        })
     }
 }

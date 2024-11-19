@@ -21,18 +21,16 @@ interface PokemonDao {
     @Query("SELECT * FROM pokemons WHERE id = :pokemonId")
     suspend fun getPokemonById(pokemonId: Int): Pokemon?
 
-    @Query("SELECT * FROM pokemons WHERE name LIKE :query")
-    suspend fun searchPokemons(query: String): List<Pokemon>
-
-    @Query("""
-        SELECT pd.* FROM pokemon_details pd
-        WHERE pd.types LIKE '%' || :type || '%'
-    """)
-    suspend fun getPokemonsByType(type: String): List<PokemonDetail>
-
     @Query("SELECT * FROM pokemon_details WHERE id = :pokemonId")
     suspend fun getPokemonDetail(pokemonId: Int): PokemonDetail?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertPokemonDetail(detail: PokemonDetail)
+
+    @Query("SELECT * FROM pokemons WHERE name LIKE '%' || :query || '%'")
+    suspend fun searchByName(query: String): List<Pokemon>
+
+    @Query("SELECT * FROM pokemons WHERE type LIKE '%' || :query || '%'")
+    suspend fun searchByType(query: String): List<Pokemon>
+
 }

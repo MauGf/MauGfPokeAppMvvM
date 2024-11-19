@@ -35,6 +35,10 @@ class PokemonViewModel @Inject constructor(
     private val _toastMessage = MutableLiveData<String>()
     val toastMessage: LiveData<String> = _toastMessage
 
+    private val _searchResults = MutableStateFlow<List<Pokemon>>(emptyList())
+    val searchResults: StateFlow<List<Pokemon>> = _searchResults.asStateFlow()
+
+
     // Paginación
     private var currentOffset = 0
     private val initialPageSize = 15
@@ -93,6 +97,31 @@ class PokemonViewModel @Inject constructor(
             Log.e("PokemonViewModel", "Error adding more Pokémon", e)
         } finally {
             _isLoading.value = false
+        }
+    }
+
+    //buscador de pokemones
+    fun searchPokemons(query: String, searchByType: Boolean) {
+        viewModelScope.launch {
+            try {
+                _isLoading.value = true
+
+                if (searchByType) {
+                    // Si searchByType es verdadero, buscamos por tipo
+                    val typeResult = repository.searchPokemonByType(query)
+                    _pokemons.value = typeResult
+                } else {
+                    // Si searchByType es falso, buscamos por nombre
+                    val nameResult = repository.searchPokemonByName(query)
+                    _pokemons.value = nameResult
+                }
+
+            } catch (e: Exception) {
+                _error.value = "Error searching Pokémon: ${e.message}"
+                Log.e("PokemonViewModel", "Error searching Pokémon", e)
+            } finally {
+                _isLoading.value = false
+            }
         }
     }
 }
