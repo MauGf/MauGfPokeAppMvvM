@@ -32,12 +32,8 @@ class PokemonViewModel @Inject constructor(
     private val _error = MutableStateFlow<String?>(null)
     val error: StateFlow<String?> = _error.asStateFlow()
 
-    private val _pokemonUpdateMessage = MutableLiveData<String>()
-    val pokemonUpdateMessage: LiveData<String> get() = _pokemonUpdateMessage
-
-    fun setUpdateMessage(message: String) {
-        _pokemonUpdateMessage.postValue(message)
-    }
+    private val _toastMessage = MutableLiveData<String>()
+    val toastMessage: LiveData<String> = _toastMessage
 
     // Paginación
     private var currentOffset = 0
@@ -68,7 +64,7 @@ class PokemonViewModel @Inject constructor(
     }
 
     // Servicio para agregar más Pokémon automáticamente cada 30 segundos
-    private fun startPokemonUpdateService() {
+    internal fun startPokemonUpdateService() {
         viewModelScope.launch {
             while (true) {
                 delay(30000) // Esperar 30 segundos
@@ -89,7 +85,9 @@ class PokemonViewModel @Inject constructor(
             _pokemons.value = _pokemons.value + newPokemons
 
             // Mostrar notificación al usuario
-            //sendNotification(newPokemons.size)
+            // Notificar que se han agregado Pokémon nuevos
+            // Notificar que se han agregado Pokémon nuevos
+            _toastMessage.postValue("Se han agregado ${additionalPageSize} nuevos Pokémon, ya son ${newPokemons.size} en total ")
         } catch (e: Exception) {
             _error.value = "Error adding more Pokémon: ${e.message}"
             Log.e("PokemonViewModel", "Error adding more Pokémon", e)
@@ -97,5 +95,4 @@ class PokemonViewModel @Inject constructor(
             _isLoading.value = false
         }
     }
-
 }
