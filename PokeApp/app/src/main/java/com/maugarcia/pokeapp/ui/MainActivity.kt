@@ -1,22 +1,29 @@
 package com.maugarcia.pokeapp.ui
 
 import android.Manifest
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import android.widget.ProgressBar
+import android.widget.Switch
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.manager.Lifecycle
+import com.google.android.material.switchmaterial.SwitchMaterial
 import com.maugarcia.pokeapp.R
 import com.maugarcia.pokeapp.data.local.entities.Pokemon
 import com.maugarcia.pokeapp.service.PokemonUpdateService
@@ -30,6 +37,7 @@ import kotlinx.coroutines.launch
 class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: PokemonViewModel
     private lateinit var adapter: PokemonAdapter
+    private lateinit var pokemonViewModel: PokemonViewModel
 
     companion object {
         private const val NOTIFICATION_PERMISSION_REQUEST_CODE = 100
@@ -41,11 +49,21 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        pokemonViewModel = ViewModelProvider(this).get(PokemonViewModel::class.java)
+
+        // Observando el mensaje de actualización
+        pokemonViewModel.pokemonUpdateMessage.observe(this, Observer { message ->
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+        })
+
         setupRecyclerView()
         setupViewModel()
         checkAndStartPokemonService()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+    }
     private fun setupRecyclerView() {
         // Función para manejar el click del Pokémon
         val onPokemonClick: (Pokemon) -> Unit = { pokemon ->
@@ -59,38 +77,22 @@ class MainActivity : AppCompatActivity() {
             // Asignar el adaptador
             adapter = this@MainActivity.adapter
 
-            // Configurar el LayoutManager si aún no lo has hecho
+            // Configurar el LayoutManager
             layoutManager = LinearLayoutManager(this@MainActivity)
-
-            // Listener para la paginación
-            addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                    super.onScrolled(recyclerView, dx, dy)
-                    val layoutManager = recyclerView.layoutManager as LinearLayoutManager
-                    val visibleItemCount = layoutManager.childCount
-                    val totalItemCount = layoutManager.itemCount
-                    val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
-
-                    if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
-                        && firstVisibleItemPosition >= 0) {
-                        viewModel.loadMorePokemons()
-                    }
-                }
-            })
         }
     }
 
     private fun setupViewModel() {
         viewModel = ViewModelProvider(this).get(PokemonViewModel::class.java)
 
-        // Usar launchWhenStarted para observar StateFlow
+        // Observar cambios en la lista de Pokémon
         lifecycleScope.launchWhenStarted {
-            viewModel.filteredPokemons.collect { pokemons ->
+            viewModel.pokemons.collect { pokemons ->
                 adapter.submitList(pokemons)
             }
         }
 
-        // Si necesitas mostrar un loading:
+        // Mostrar u ocultar un indicador de carga
         lifecycleScope.launchWhenStarted {
             viewModel.isLoading.collect { isLoading ->
                 findViewById<ProgressBar>(R.id.progressBar).visibility =
@@ -98,7 +100,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        // Si necesitas manejar errores:
+        // Manejar errores
         lifecycleScope.launchWhenStarted {
             viewModel.error.collect { error ->
                 error?.let {
@@ -109,43 +111,44 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun checkAndStartPokemonService() {
-        // Verificar si ya se ha solicitado el permiso previamente
         val sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
         val permissionRequested = sharedPreferences.getBoolean(KEY_PERMISSION_REQUESTED, false)
 
-        // Si el permiso nunca ha sido solicitado o no ha sido concedido
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && !permissionRequested) {
-            // Verificar si el permiso ha sido concedido
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
                 != PackageManager.PERMISSION_GRANTED) {
-                // Si el permiso no ha sido concedido, solicitarlo
-                ActivityCompat.requestPermissions(this,
+                ActivityCompat.requestPermissions(
+                    this,
                     arrayOf(Manifest.permission.POST_NOTIFICATIONS),
-                    NOTIFICATION_PERMISSION_REQUEST_CODE)
+                    NOTIFICATION_PERMISSION_REQUEST_CODE
+                )
             } else {
-                // Si el permiso ya está concedido, actualizar SharedPreferences
                 sharedPreferences.edit().putBoolean(KEY_PERMISSION_REQUESTED, true).apply()
                 startPokemonService()
             }
         } else {
-            // Si el permiso ya fue concedido anteriormente o si el dispositivo está en una versión anterior
             startPokemonService()
         }
     }
 
-    // Manejar la respuesta de la solicitud de permisos
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
         if (requestCode == NOTIFICATION_PERMISSION_REQUEST_CODE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Si el permiso fue concedido, actualizar SharedPreferences y empezar el servicio
                 val sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
                 sharedPreferences.edit().putBoolean(KEY_PERMISSION_REQUESTED, true).apply()
                 startPokemonService()
             } else {
-                // Si el permiso fue denegado, informar al usuario
-                Toast.makeText(this, "El permiso de notificaciones es necesario para el servicio.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this,
+                    "El permiso de notificaciones es necesario para el servicio.",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
@@ -154,4 +157,6 @@ class MainActivity : AppCompatActivity() {
         val serviceIntent = Intent(this, PokemonUpdateService::class.java)
         ContextCompat.startForegroundService(this, serviceIntent)
     }
+
+
 }

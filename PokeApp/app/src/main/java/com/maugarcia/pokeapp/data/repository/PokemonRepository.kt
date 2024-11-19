@@ -15,7 +15,7 @@ class PokemonRepository @Inject constructor(
     private val gson: Gson
 ) {
     suspend fun getPokemons(limit: Int = 15, offset: Int = 0): List<Pokemon> {
-        return dao.getPokemons(limit)
+        return dao.getPokemons(limit, offset)
     }
 
     suspend fun fetchAndStorePokemons(limit: Int, offset: Int = 0) {
