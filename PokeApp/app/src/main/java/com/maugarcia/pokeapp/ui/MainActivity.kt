@@ -49,11 +49,17 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // Inicializa el ViewModel
         pokemonViewModel = ViewModelProvider(this).get(PokemonViewModel::class.java)
 
-        // Observando el mensaje de actualización
-        pokemonViewModel.pokemonUpdateMessage.observe(this, Observer { message ->
-            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+        // Iniciar el servicio de actualización de Pokémon
+        pokemonViewModel.startPokemonUpdateService()
+
+        // Observar el LiveData para mostrar el Toast cuando se agreguen Pokémon nuevos
+        pokemonViewModel.toastMessage.observe(this, Observer { message ->
+            message?.let {
+                showToast(it)
+            }
         })
 
         setupRecyclerView()
@@ -61,9 +67,10 @@ class MainActivity : AppCompatActivity() {
         checkAndStartPokemonService()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
     }
+
     private fun setupRecyclerView() {
         // Función para manejar el click del Pokémon
         val onPokemonClick: (Pokemon) -> Unit = { pokemon ->
@@ -157,6 +164,4 @@ class MainActivity : AppCompatActivity() {
         val serviceIntent = Intent(this, PokemonUpdateService::class.java)
         ContextCompat.startForegroundService(this, serviceIntent)
     }
-
-
 }

@@ -113,10 +113,9 @@ class PokemonUpdateService : Service() {
 
             // Si la app está en primer plano, mostrar el Toast
             if (isAppInForeground) {
-                // Usar un Handler para mostrar el Toast en el hilo principal
+                // Mostrar el Toast en el contexto de la aplicación
                 Handler(Looper.getMainLooper()).post {
-                    // Aquí se notifica al ViewModel para que muestre el mensaje
-                    pokemonViewModel.setUpdateMessage("Se han agregado 10 nuevos Pokémon")
+                    Toast.makeText(applicationContext, "Se han agregado 10 nuevos Pokémon", Toast.LENGTH_SHORT).show()
                 }
             }
         }
