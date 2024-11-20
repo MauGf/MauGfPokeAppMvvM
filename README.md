@@ -1,8 +1,7 @@
-# MauGfPokeAppMvvM
-Se creara una app en Kotlin con arquitectura MVVM que consuma la PokeAPI y cumpla con los requisitos mencionados.
-# 🐾 Pokémon App
 
-Una aplicación móvil para explorar Pokémon, sus detalles y estadísticas. Desarrollada para aprender y experimentar con nuevas tecnologías y buenas prácticas de desarrollo.
+# Pokémon App MVVM
+
+Aplicación móvil para explorar Pokémon, sus detalles y estadísticas. Desarrollada para aprender y experimentar con nuevas tecnologías y buenas prácticas de desarrollo.
 
 ---
 
@@ -92,5 +91,5 @@ Además, se utiliza **Lottie** para animaciones ligeras y atractivas, como el lo
 
 2. **Clonar el repositorio**:
    ```bash
-   git clone https://github.com/usuario/pokemon-app.git
+   git clone [ https://github.com/usuario/pokemon-app.git](https://github.com/MauGf/MauGfPokeAppMvvM.git)
    cd pokemon-app
