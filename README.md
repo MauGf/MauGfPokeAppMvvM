@@ -83,19 +83,21 @@ Además, se utiliza **Lottie** para animaciones ligeras y atractivas, como el lo
 ## 🖼️ Capturas de Pantalla
 
 ### Splash Screen
-![Lista de Pokémon](screenshots/splash_screen.jpg)
+![splash_screen](https://github.com/user-attachments/assets/e395bfa3-f8e9-4c31-917b-8e4cc5d1a842)
+
+### Permitir permisos de notificación
+![Splash Screen](https://github.com/usuario/pokemon-app/screenshots/splash_screen.png)
 
 ### Pantalla Principal - Lista de Pokémon
-![Lista de Pokémon](https://github.com/usuario/pokemon-app/screenshots/pokemon_list.png)
+![pantalla_principal](https://github.com/user-attachments/assets/b8c09373-8e76-42af-9903-e386713e8a40)
 
 ### Detalles de un Pokémon
-![Detalles de Pokémon](https://github.com/usuario/pokemon-app/screenshots/pokemon_detail.png)
+![detalle_pokemon](https://github.com/user-attachments/assets/04dc5e2c-68c2-41c2-bc81-e621723f3a75)
 
 ### Carga en Segundo Plano
-![Carga en Segundo Plano](https://github.com/usuario/pokemon-app/screenshots/loading.png)
+![mensaje_de_carga_segundo_plano](https://github.com/user-attachments/assets/b158832e-302a-4faa-a602-bb839317818a)
 
-### Splash Screen
-![Splash Screen](https://github.com/usuario/pokemon-app/screenshots/splash_screen.png)
+
 
 ---
 
