@@ -34,7 +34,7 @@
             android:name=".ui.PokemonDetailActivity"
             android:exported="false"
             android:label="@string/pokemon_detail_activity_label"
-            android:theme="@style/Theme.PokeApp" />
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <service
             android:name=".service.PokemonUpdateService"

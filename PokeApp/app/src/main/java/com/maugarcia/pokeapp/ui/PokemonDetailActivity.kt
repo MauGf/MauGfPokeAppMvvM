@@ -3,10 +3,12 @@ package com.maugarcia.pokeapp.ui
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.MenuItem
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.google.android.material.chip.Chip
@@ -28,6 +30,17 @@ class PokemonDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityPokemonDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // Configurar el Toolbar
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
+
+        // Asegúrate de que la ActionBar se maneje a través del Toolbar
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true) // Habilitar la flecha de retroceso
+            setDisplayShowTitleEnabled(false) // No mostrar el título en la ActionBar
+        }
+
 
         val pokemonId = intent.getIntExtra(EXTRA_POKEMON_ID, -1)
         if (pokemonId == -1) {
@@ -99,6 +112,16 @@ class PokemonDetailActivity : AppCompatActivity() {
         }
     }
 
+    // Manejar el evento de retroceso
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                onBackPressed() // Volver a la actividad anterior
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
     companion object {
         const val EXTRA_POKEMON_ID = "extra_pokemon_id"
 
