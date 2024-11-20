@@ -1,9 +1,12 @@
 package com.maugarcia.pokeapp.ui
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.WindowManager
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.activity.viewModels
@@ -37,10 +40,9 @@ class PokemonDetailActivity : AppCompatActivity() {
 
         // Asegúrate de que la ActionBar se maneje a través del Toolbar
         supportActionBar?.apply {
-            setDisplayHomeAsUpEnabled(true) // Habilitar la flecha de retroceso
-            setDisplayShowTitleEnabled(false) // No mostrar el título en la ActionBar
+            setDisplayHomeAsUpEnabled(true)
+            setDisplayShowTitleEnabled(false)
         }
-
 
         val pokemonId = intent.getIntExtra(EXTRA_POKEMON_ID, -1)
         if (pokemonId == -1) {
@@ -50,6 +52,7 @@ class PokemonDetailActivity : AppCompatActivity() {
 
         observeViewModel()
         viewModel.loadPokemonDetail(pokemonId)
+
     }
 
     private fun observeViewModel() {
@@ -108,9 +111,24 @@ class PokemonDetailActivity : AppCompatActivity() {
             "water" -> R.color.water_type
             "grass" -> R.color.grass_type
             "electric" -> R.color.electric_type
-            else -> R.color.default_type
+            "normal" -> R.color.normal_type
+            "bug" -> R.color.bug_type
+            "poison" -> R.color.poison_type
+            "ghost" -> R.color.ghost_type
+            "fairy" -> R.color.fairy_type
+            "fighting" -> R.color.fighting_type
+            "psychic" -> R.color.psychic_type
+            "rock" -> R.color.rock_type
+            "ground" -> R.color.ground_type
+            "ice" -> R.color.ice_type
+            "dragon" -> R.color.dragon_type
+            "dark" -> R.color.dark_type
+            "steel" -> R.color.steel_type
+            "flying" -> R.color.flying_type
+            else -> R.color.default_type  // Valor por defecto si no se encuentra el tipo
         }
     }
+
 
     // Manejar el evento de retroceso
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

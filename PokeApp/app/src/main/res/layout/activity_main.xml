@@ -11,9 +11,8 @@
         android:id="@+id/app_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="240dp"
-        android:background="@android:color/transparent"
         android:fitsSystemWindows="true"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        android:theme="@style/ThemeOverlay.AppCompat.Light">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/collapsing_toolbar"
@@ -44,22 +43,6 @@
                 android:orientation="vertical"
                 android:padding="@dimen/spacing_mlarge"
                 app:layout_collapseMode="parallax">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Pokemon"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-                    android:textColor="@android:color/white"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_medium"
-                    android:text="Aplicación"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
-                    android:textColor="@android:color/white" />
 
             </LinearLayout>
 
@@ -93,6 +76,7 @@
                         android:layout_height="@dimen/spacing_xxlarge"
                         android:background="@android:color/transparent"
                         android:clickable="true"
+                        android:focusable="true"
                         app:srcCompat="@drawable/ic_search"
                         app:tint="@color/grey_60" />
 
@@ -102,7 +86,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:background="@android:color/transparent"
-                        android:hint="Busca pokemon por nombre o tipo"
+                        android:hint="@string/busca_pokemon_por_nombre"
                         android:imeOptions="actionSearch"
                         android:maxLines="1"
                         android:singleLine="true">
@@ -137,22 +121,32 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:scrollbars="vertical"
-            tools:listitem="@layout/item_pokemon" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:scrollbars="vertical"
+                tools:listitem="@layout/item_pokemon" />
 
-        <ProgressBar
-            android:id="@+id/progressBar"
-            style="?android:attr/progressBarStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:layout_gravity="center" />
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_gravity="center" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
+    <!-- Floating Action Button -->
+    <com.getbase.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabMain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:tint="@android:color/white"
+        android:src="@drawable/baseline_add_24"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="16dp"/>
+
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

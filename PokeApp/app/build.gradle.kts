@@ -62,6 +62,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    testImplementation(libs.junit.jupiter)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(libs.swiperefreshlayout)
@@ -102,15 +103,20 @@ dependencies {
 
     // UI Components
     implementation(libs.androidx.recyclerview)
+    //lottie
+    implementation(libs.lottie)
+
+    //floating action button
+    implementation(libs.floating)
 
     // Navigation
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
 
-
-    // Testing
     testImplementation(libs.junit)
     testImplementation(libs.mockito.core)
+    testImplementation(libs.core.testing)  // Core testing para LiveData y ViewModels
+    testImplementation(libs.mockk)          // Para mockeo en pruebas
     testImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

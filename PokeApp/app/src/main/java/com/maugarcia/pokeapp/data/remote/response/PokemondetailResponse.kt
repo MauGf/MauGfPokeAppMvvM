@@ -14,8 +14,16 @@ data class PokemonDetailResponse(
 )
 
 data class Sprites(
-    val front_default: String?  // URL de la imagen por defecto del Pokémon
+    val front_default: String?, // URL de la imagen por defecto del Pokémon val
+    val  other: OtherSprites?
 )
+data class OtherSprites(
+    val home: HomeSprites?  // La propiedad 'home' dentro de 'other'
+)
+data class HomeSprites(
+    val front_default: String?  // URL de la imagen en 'home'
+)
+
 data class PokemonType(
     val slot: Int,
     val type: Type

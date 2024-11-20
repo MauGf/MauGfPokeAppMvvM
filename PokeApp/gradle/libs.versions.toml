@@ -9,6 +9,8 @@ lifecycleRuntimeKtx = "2.7.0"
 activityCompose = "1.8.2"
 composeBom = "2023.08.00"
 swiperefreshlayout = "1.1.0"
+lottie = "5.0.3"
+floating = "1.10.0"
 
 # Versiones adicionales para MVVM
 room = "2.6.1"
@@ -25,8 +27,15 @@ navigation = "2.7.7"
 hilt = "2.48"
 activity-ktx = "1.8.2"
 fragment-ktx = "1.6.2"
+junitJupiter = "5.8.1"
+mockk = "1.12.5"
+coretesting = "2.1.0"
 
 
+
+
+hilttest = "2.48"                # Versión de Hilt para pruebas # Versión de Kotlin Coroutines
+coroutinesTest = "1.7.3"     # Versión de Kotlin Coroutines para tests
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -82,10 +91,16 @@ androidx-constraintlayout = { group = "androidx.constraintlayout", name = "const
 androidx-navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigation" }
 androidx-navigation-ui-ktx = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigation" }
 
+#lottie
+lottie = { module = "com.airbnb.android:lottie", version.ref = "lottie" }
+floating = { module = "com.getbase:floatingactionbutton", version.ref = "floating" }
+
 # Testing
 mockito-core = { group = "org.mockito", name = "mockito-core", version.ref = "mockito" }
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines" }
-
+junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junitJupiter" }
+mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" } # Agregado MockK para mocking
+core-testing = { module = "androidx.arch.core:core-testing", version.ref = "coretesting" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

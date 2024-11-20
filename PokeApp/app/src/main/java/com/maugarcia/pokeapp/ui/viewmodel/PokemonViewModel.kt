@@ -1,27 +1,25 @@
 package com.maugarcia.pokeapp.ui.viewmodel
 
-import android.app.Notification
-import android.app.NotificationManager
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.maugarcia.pokeapp.R
 import com.maugarcia.pokeapp.data.local.entities.Pokemon
 import com.maugarcia.pokeapp.data.repository.PokemonRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class PokemonViewModel @Inject constructor(
     private val repository: PokemonRepository,
-
 ) : ViewModel() {
     private val _pokemons = MutableStateFlow<List<Pokemon>>(emptyList())
     val pokemons: StateFlow<List<Pokemon>> = _pokemons.asStateFlow()
@@ -35,29 +33,33 @@ class PokemonViewModel @Inject constructor(
     private val _toastMessage = MutableLiveData<String>()
     val toastMessage: LiveData<String> = _toastMessage
 
-    private val _searchResults = MutableStateFlow<List<Pokemon>>(emptyList())
-    val searchResults: StateFlow<List<Pokemon>> = _searchResults.asStateFlow()
+    // Background update state
+    private val _isBackgroundUpdateEnabled = MutableLiveData(true)
+    val isBackgroundUpdateEnabled: LiveData<Boolean> = _isBackgroundUpdateEnabled
 
-
-    // Paginación
+    // Pagination
     private var currentOffset = 0
     private val initialPageSize = 15
     private val additionalPageSize = 10
+
+    // Job to manage background update coroutine
+    private var backgroundUpdateJob: Job? = null
 
     init {
         loadInitialData()
         startPokemonUpdateService()
     }
 
-    // Carga inicial de 15 Pokémon
+    // Initial load of 15 Pokémon
     private fun loadInitialData() {
         viewModelScope.launch {
             try {
                 _isLoading.value = true
                 if (repository.getPokemonCount() == 0) {
-                    repository.fetchAndStorePokemons(initialPageSize, currentOffset)
+                    repository.fetchAndStorePokemons(initialPageSize, 0)
                 }
                 _pokemons.value = repository.getPokemons(initialPageSize)
+                currentOffset = initialPageSize
             } catch (e: Exception) {
                 _error.value = "Error loading initial Pokémon: ${e.message}"
                 Log.e("PokemonViewModel", "Error loading initial Pokémon", e)
@@ -67,31 +69,56 @@ class PokemonViewModel @Inject constructor(
         }
     }
 
-    // Servicio para agregar más Pokémon automáticamente cada 30 segundos
+    // Service to add more Pokémon automatically every 30 seconds
     internal fun startPokemonUpdateService() {
-        viewModelScope.launch {
-            while (true) {
-                delay(30000) // Esperar 30 segundos
-                addPokemonsInBackground()
+        // Asegúrate de no iniciar un nuevo Job si ya hay uno activo
+        if (backgroundUpdateJob?.isActive == true) return
+
+        backgroundUpdateJob = viewModelScope.launch {
+            while (isActive) { // Verifica si el Job está activo
+                if ( !_isLoading.value && _isBackgroundUpdateEnabled.value == true) {
+                    addPokemonsInBackground()
+                }
+                delay(30000) // Espera 30 segundos
             }
         }
     }
 
-    // Agregar 10 Pokémon en segundo plano
+    // Toggle background update
+    fun toggleBackgroundUpdate() {
+        _isBackgroundUpdateEnabled.value = !(_isBackgroundUpdateEnabled.value ?: true)
+
+        // Update toast message based on new state
+        val message = if (_isBackgroundUpdateEnabled.value == true)
+            "Carga de Pokémon en segundo plano reanudada"
+        else
+            "Carga de Pokémon en segundo plano detenida"
+
+        _toastMessage.value = message
+    }
+
+    // Add 10 Pokémon in background
     private suspend fun addPokemonsInBackground() {
         try {
             _isLoading.value = true
-            currentOffset += additionalPageSize
+
+            // Fetch new Pokémon at the current offset
             repository.fetchAndStorePokemons(additionalPageSize, currentOffset)
-            val newPokemons = repository.getPokemons(currentOffset + additionalPageSize)
 
-            // Actualizar lista visible
-            _pokemons.value = _pokemons.value + newPokemons
+            // Retrieve the new Pokémon
+            val newPokemons = repository.getPokemons(additionalPageSize, currentOffset)
 
-            // Mostrar notificación al usuario
-            // Notificar que se han agregado Pokémon nuevos
-            // Notificar que se han agregado Pokémon nuevos
-            _toastMessage.postValue("Se han agregado ${additionalPageSize} nuevos Pokémon, ya son ${newPokemons.size} en total ")
+            // Update visible list
+            val currentPokemonsList = _pokemons.value
+            val updatedPokemonsList = currentPokemonsList + newPokemons
+
+            _pokemons.value = updatedPokemonsList
+
+            // Update offset for next batch
+            currentOffset += additionalPageSize
+
+            // Notify about added Pokémon
+            _toastMessage.postValue("Se han agregado ${additionalPageSize} nuevos Pokémon, ya son ${updatedPokemonsList.size} en total")
         } catch (e: Exception) {
             _error.value = "Error adding more Pokémon: ${e.message}"
             Log.e("PokemonViewModel", "Error adding more Pokémon", e)
@@ -100,18 +127,18 @@ class PokemonViewModel @Inject constructor(
         }
     }
 
-    //buscador de pokemones
+    // Pokémon search functionality
     fun searchPokemons(query: String, searchByType: Boolean) {
         viewModelScope.launch {
             try {
                 _isLoading.value = true
 
                 if (searchByType) {
-                    // Si searchByType es verdadero, buscamos por tipo
+                    // If searchByType is true, search by type
                     val typeResult = repository.searchPokemonByType(query)
                     _pokemons.value = typeResult
                 } else {
-                    // Si searchByType es falso, buscamos por nombre
+                    // If searchByType is false, search by name
                     val nameResult = repository.searchPokemonByName(query)
                     _pokemons.value = nameResult
                 }
@@ -123,5 +150,27 @@ class PokemonViewModel @Inject constructor(
                 _isLoading.value = false
             }
         }
+    }
+
+    // Method to stop Pokemon update
+    fun stopPokemonUpdate() {
+        backgroundUpdateJob?.cancel()
+        _isBackgroundUpdateEnabled.value = false
+        _toastMessage.value = "Carga de Pokémon en segundo plano detenida"
+    }
+
+    // Method to start Pokemon update
+    fun startPokemonUpdate() {
+        if (backgroundUpdateJob?.isActive != true) {
+            startPokemonUpdateService()
+            _isBackgroundUpdateEnabled.value = true
+            _toastMessage.value = "Carga de Pokémon en segundo plano reanudada"
+        }
+    }
+
+    // Clean up job when ViewModel is cleared
+    override fun onCleared() {
+        backgroundUpdateJob?.cancel()
+        super.onCleared()
     }
 }
