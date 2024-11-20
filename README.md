@@ -1,6 +1,5 @@
 # MauGfPokeAppMvvM
 Se creara una app en Kotlin con arquitectura MVVM que consuma la PokeAPI y cumpla con los requisitos mencionados.
-
 # 🐾 Pokémon App
 
 Una aplicación móvil para explorar Pokémon, sus detalles y estadísticas. Desarrollada para aprender y experimentar con nuevas tecnologías y buenas prácticas de desarrollo.
@@ -16,6 +15,7 @@ Una aplicación móvil para explorar Pokémon, sus detalles y estadísticas. Des
 5. [Instalación y Configuración](#-instalación-y-configuración)
 6. [Pruebas](#-pruebas)
 7. [Contribuciones](#-contribuciones)
+8. [Capturas de Pantalla](#-capturas-de-pantalla)
 
 ---
 
@@ -77,6 +77,22 @@ Además, se utiliza **Lottie** para animaciones ligeras y atractivas, como el lo
 - **Carga en Segundo Plano**: La aplicación permite que los datos de los Pokémon se carguen en segundo plano para no bloquear la interfaz de usuario. Además, ofrece la posibilidad de detener o reanudar la carga en cualquier momento.
 - **Splash Screen**: Al iniciar la aplicación, se muestra una pantalla de inicio con el logotipo mientras se cargan los datos.
 - **Diseño Material**: La interfaz sigue las pautas de Material Design, ofreciendo una experiencia fluida y coherente.
+
+---
+
+## 🖼️ Capturas de Pantalla
+
+### Pantalla Principal - Lista de Pokémon
+![Lista de Pokémon](https://github.com/usuario/pokemon-app/screenshots/pokemon_list.png)
+
+### Detalles de un Pokémon
+![Detalles de Pokémon](https://github.com/usuario/pokemon-app/screenshots/pokemon_detail.png)
+
+### Carga en Segundo Plano
+![Carga en Segundo Plano](https://github.com/usuario/pokemon-app/screenshots/loading.png)
+
+### Splash Screen
+![Splash Screen](https://github.com/usuario/pokemon-app/screenshots/splash_screen.png)
 
 ---
 
