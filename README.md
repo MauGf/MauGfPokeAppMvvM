@@ -83,7 +83,7 @@ Además, se utiliza **Lottie** para animaciones ligeras y atractivas, como el lo
 ## 🖼️ Capturas de Pantalla
 
 ### Splash Screen
-![Lista de Pokémon](PokeApp/screenshots/Screenshot_20241120_162310_Pokemon App.jpg)
+![Lista de Pokémon](https://github.com/MauGf/MauGfPokeAppMvvM/PokeApp/screenshots/splash_screen.jpg)
 
 ### Pantalla Principal - Lista de Pokémon
 ![Lista de Pokémon](https://github.com/usuario/pokemon-app/screenshots/pokemon_list.png)
