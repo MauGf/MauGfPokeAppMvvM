@@ -41,7 +41,7 @@ Aplicación móvil para explorar Pokémon, sus detalles y estadísticas. Desarro
 
 ## 🏛️ Arquitectura
 
-La aplicación sigue una arquitectura **MVVM (Model-View-ViewModel)**, combinada con componentes de Android Jetpack:
+La aplicación sigue una arquitectura **MVVM (Model-View-ViewModel)**:
 
 1. **Data Layer**:
    - **Repository**: Fuente de datos que coordina la API remota y el almacenamiento local con Room.
@@ -72,6 +72,7 @@ Además, se utiliza **Lottie** para animaciones ligeras y atractivas, como el lo
 ## ✨ Funcionalidades Principales
 
 - **Explorar Pokémon**: Lista todos los Pokémon disponibles con su información básica.
+- - **Diseño Material**: Busqueda segun nombre.
 - **Ver Detalles**: Consulta información detallada de cada Pokémon.
 - **Carga en Segundo Plano**: La aplicación permite que los datos de los Pokémon se carguen en segundo plano para no bloquear la interfaz de usuario. Además, ofrece la posibilidad de detener o reanudar la carga en cualquier momento.
 - **Splash Screen**: Al iniciar la aplicación, se muestra una pantalla de inicio con el logotipo mientras se cargan los datos.
