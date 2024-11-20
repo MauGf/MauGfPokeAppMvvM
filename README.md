@@ -82,6 +82,9 @@ Además, se utiliza **Lottie** para animaciones ligeras y atractivas, como el lo
 
 ## 🖼️ Capturas de Pantalla
 
+### Splash Screen
+![Lista de Pokémon](PokeApp/screenshots/Screenshot_20241120_162310_Pokemon App.jpg)
+
 ### Pantalla Principal - Lista de Pokémon
 ![Lista de Pokémon](https://github.com/usuario/pokemon-app/screenshots/pokemon_list.png)
 
@@ -98,8 +101,8 @@ Además, se utiliza **Lottie** para animaciones ligeras y atractivas, como el lo
 
 ## 🚀 Instalación y Configuración
 
-1. **Requisitos previos**:
-   - Android Studio Arctic Fox o superior.
+1. **Versión de Android Studio**:
+   - Android Studio AAndroid Studio Koala Feature Drop | 2024.1.2
    - Emulador o dispositivo físico con Android 7.0+.
 
 2. **Clonar el repositorio**:
