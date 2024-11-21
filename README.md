@@ -43,14 +43,47 @@ Aplicación móvil para explorar Pokémon, sus detalles y estadísticas. Desarro
 
 La aplicación sigue una arquitectura **MVVM (Model-View-ViewModel)**:
 
-1. **Data Layer**:
-   - **Repository**: Fuente de datos que coordina la API remota y el almacenamiento local con Room.
-   - **Data Source**: Maneja los servicios de red y las operaciones en base de datos.
-2. **Domain Layer**:
-   - Encapsula la lógica de negocio.
-3. **UI Layer**:
-   - **ViewModel**: Maneja el estado de la UI y permite separar la lógica de negocio del ciclo de vida de las actividades/fragments.
-   - **XML Layouts**: Las pantallas y vistas están diseñadas con XML, siguiendo las pautas de Material Design.
+## 📂 Estructura del Proyecto - Arquitectura de Archivos
+
+La aplicación sigue una arquitectura organizada por paquetes para separar las responsabilidades de cada módulo. A continuación se detalla la estructura y la funcionalidad de cada directorio y archivo:
+
+```plaintext
+com.maugarcia.pokeapp
+│
+├── data                      # Manejo de datos (local y remoto)
+│   ├── local                 # Datos almacenados localmente
+│   │   ├── entities          # Clases de datos locales
+│   │   │   ├── Pokemon       # Modelo de datos para un Pokémon
+│   │   │   ├── PokemonDetail # Modelo de datos para el detalle de un Pokémon
+│   │   ├── PokemonDao        # DAO para operaciones de base de datos
+│   │   └── PokemonDatabase   # Configuración de la base de datos local
+│   │
+│   ├── remote                # Comunicación con la API
+│   │   ├── response          # Modelos y respuestas de la API
+│   │   │   ├── PokemonResponse          # Respuesta genérica de la API
+│   │   │   ├── PokemondetailResponse    # Respuesta detallada de un Pokémon
+│   │   │   ├── PokemonResult            # Objeto de un Pokémon desde la API
+│   │   ├── PokeApiService    # Interfaz para las peticiones HTTP
+│   │   └── RetrofitClient    # Cliente Retrofit para conectar con la API
+│   │
+│   ├── repository            # Implementación de repositorios
+│   │   ├── PokemonRepository         # Implementación del repositorio principal
+│   │   └── PokemonRepositoryInterface # Interfaz para el repositorio
+│   │
+│   └── service               # Servicios adicionales
+│       └── PokemonUpdateService  # Servicio para manejar cargas en segundo plano
+│
+├── di                       # Inyección de dependencias
+│   └── AppModule            # Configuración de los módulos para Dagger/Hilt
+│
+├── ui                       # Interfaz de usuario
+│   ├── adapter              # Adaptadores para RecyclerViews
+│   └── viewmodel            # ViewModels para manejar la lógica de presentación
+│       ├── MainActivity              # Actividad principal de la lista de Pokémon
+│       ├── PokemonDetailActivity     # Actividad para el detalle de un Pokémon
+│       └── PokemonSplashActivity     # Actividad del Splash Screen
+│
+└── App                      # Configuración global de la aplicación
 
 Además, se utiliza **Lottie** para animaciones ligeras y atractivas, como el logo de carga y transiciones. **Coroutines** se emplea para manejar tareas asincrónicas de forma sencilla y eficiente, especialmente en la carga de datos en segundo plano.
 
@@ -87,7 +120,7 @@ Además, se utiliza **Lottie** para animaciones ligeras y atractivas, como el lo
 ## 🚀 Instalación y Configuración
 
 1. **Versión de Android Studio**:
-   - Android Studio AAndroid Studio Koala Feature Drop | 2024.1.2
+   - Realizada en Android Studio Koala Feature Drop | 2024.1.2
    - Emulador o dispositivo físico con Android 7.0+.
 
 2. **Clonar el repositorio**:
