@@ -85,6 +85,7 @@ com.maugarcia.pokeapp
 │
 └── App                      # Configuración global de la aplicación
 
+```
 Además, se utiliza **Lottie** para animaciones ligeras y atractivas, como el logo de carga y transiciones. **Coroutines** se emplea para manejar tareas asincrónicas de forma sencilla y eficiente, especialmente en la carga de datos en segundo plano.
 
 ---
