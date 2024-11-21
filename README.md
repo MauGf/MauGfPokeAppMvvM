@@ -87,7 +87,7 @@ Además, se utiliza **Lottie** para animaciones ligeras y atractivas, como el lo
 ## 🚀 Instalación y Configuración
 
 1. **Versión de Android Studio**:
-   - Android Studio AAndroid Studio Koala Feature Drop | 2024.1.2
+   - Realizada en Android Studio Koala Feature Drop | 2024.1.2
    - Emulador o dispositivo físico con Android 7.0+.
 
 2. **Clonar el repositorio**:
