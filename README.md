@@ -72,7 +72,7 @@ Además, se utiliza **Lottie** para animaciones ligeras y atractivas, como el lo
 ## ✨ Funcionalidades Principales
 
 - **Explorar Pokémon**: Lista todos los Pokémon disponibles con su información básica.
-- - **Diseño Material**: Busqueda segun nombre.
+- **Busqueda**: Busqueda segun nombre.
 - **Ver Detalles**: Consulta información detallada de cada Pokémon.
 - **Carga en Segundo Plano**: La aplicación permite que los datos de los Pokémon se carguen en segundo plano para no bloquear la interfaz de usuario. Además, ofrece la posibilidad de detener o reanudar la carga en cualquier momento.
 - **Splash Screen**: Al iniciar la aplicación, se muestra una pantalla de inicio con el logotipo mientras se cargan los datos.
