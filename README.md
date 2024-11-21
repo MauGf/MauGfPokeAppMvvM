@@ -126,5 +126,5 @@ Además, se utiliza **Lottie** para animaciones ligeras y atractivas, como el lo
 
 2. **Clonar el repositorio**:
    ```bash
-   git clone [ https://github.com/usuario/pokemon-app.git](https://github.com/MauGf/MauGfPokeAppMvvM.git)
+   git clone (https://github.com/MauGf/MauGfPokeAppMvvM.git)
    cd pokemon-app
